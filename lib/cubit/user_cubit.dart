@@ -36,4 +36,26 @@ class UserCubit extends Cubit<UserState> {
 
   //Sign up confirm password
   TextEditingController confirmPassword = TextEditingController();
+
+  signIn() async {
+    emit(SingInLoading());
+    try {
+      var response = await Dio().post(
+        'https://food-api-omega.vercel.app/api/v1/user/signin',
+        data: {
+          'email': signInEmail.text,
+          'password': signInPassword.text,
+        },
+      );
+      emit(SingInSuccess());
+      print(response);
+    } catch (e) {
+      emit(
+        SingInFailed(
+          errorMessage: e.toString(),
+        ),
+      );
+      print(e.toString());
+    }
+  }
 }
