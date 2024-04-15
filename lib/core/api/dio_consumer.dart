@@ -1,15 +1,36 @@
 import 'package:dio/dio.dart';
+import 'package:happy_tech_mastering_api_with_flutter/core/api/end_point.dart';
 import 'package:happy_tech_mastering_api_with_flutter/core/error/exceptions.dart';
 import 'api_consumer.dart';
+import 'api_interceptor.dart';
 
 class DioConsumer extends ApiConsumer {
-  final _dio = Dio();
+  final Dio dio;
+
+  DioConsumer({required this.dio}) {
+    dio.options.baseUrl = EndPoint.baseUrl;
+    dio.interceptors.add(ApiInterceptor());
+    dio.interceptors.add(
+      LogInterceptor(
+        error: true,
+        requestBody: true,
+        responseBody: true,
+        requestHeader: true,
+        responseHeader: true,
+      ),
+    );
+  }
 
   @override
-  Future<dynamic> get(String path,
-      {Map<String, dynamic>? queryParameters}) async {
+  Future<dynamic> get(
+    String path, {
+    Map<String, dynamic>? queryParameters,
+  }) async {
     try {
-      var response = await _dio.get(path, queryParameters: queryParameters);
+      var response = await dio.get(
+        path,
+        queryParameters: queryParameters,
+      );
 
       return response.data;
     } on DioException catch (e) {
@@ -18,9 +39,16 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  Future<dynamic> delete(String path, {Map<String, dynamic>? body}) async {
+  Future<dynamic> delete(
+    String path, {
+    Map<String, dynamic>? body,
+    bool isFormData = false,
+  }) async {
     try {
-      final response = await _dio.delete(path, data: body);
+      final response = await dio.delete(
+        path,
+        data: isFormData ? FormData.fromMap(body!) : body,
+      );
       return response.data;
     } on DioException catch (e) {
       handelExceptions(e);
@@ -28,9 +56,16 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  Future<dynamic> patch(String path, {Map<String, dynamic>? body}) async {
+  Future<dynamic> patch(
+    String path, {
+    Map<String, dynamic>? body,
+    bool isFormData = false,
+  }) async {
     try {
-      final response = await _dio.patch(path, data: body);
+      final response = await dio.patch(
+        path,
+        data: isFormData ? FormData.fromMap(body!) : body,
+      );
       return response.data;
     } on DioException catch (e) {
       handelExceptions(e);
@@ -38,9 +73,16 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  Future<dynamic> post(String path, {Map<String, dynamic>? body}) async {
+  Future<dynamic> post(
+    String path, {
+    Map<String, dynamic>? body,
+    bool isFormData = false,
+  }) async {
     try {
-      final response = await _dio.post(path, data: body);
+      final response = await dio.post(
+        path,
+        data: isFormData ? FormData.fromMap(body!) : body,
+      );
       return response.data;
     } on DioException catch (e) {
       handelExceptions(e);
@@ -48,9 +90,16 @@ class DioConsumer extends ApiConsumer {
   }
 
   @override
-  Future<dynamic> put(String path, {Map<String, dynamic>? body}) async {
+  Future<dynamic> put(
+    String path, {
+    Map<String, dynamic>? body,
+    bool isFormData = false,
+  }) async {
     try {
-      final response = await _dio.put(path, data: body);
+      final response = await dio.put(
+        path,
+        data: isFormData ? FormData.fromMap(body!) : body,
+      );
       return response.data;
     } on DioException catch (e) {
       handelExceptions(e);

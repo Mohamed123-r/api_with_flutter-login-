@@ -1,18 +1,17 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit.dart';
 import 'package:happy_tech_mastering_api_with_flutter/screens/sign_in_screen.dart';
 import 'core/api/dio_consumer.dart';
 
-
-
 void main() {
   runApp(
     BlocProvider(
-      create: (context) => UserCubit(DioConsumer(
-
-      ),
-
+      create: (context) => UserCubit(
+        DioConsumer(
+          dio: Dio(),
+        ),
       ),
       child: const MyApp(),
     ),
