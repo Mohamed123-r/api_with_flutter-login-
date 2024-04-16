@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit.dart';
-import 'package:happy_tech_mastering_api_with_flutter/cubit/user_state.dart';
+import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit/user_cubit.dart';
+import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit/user_state.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/custom_form_button.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/custom_input_field.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/dont_have_an_account.dart';
