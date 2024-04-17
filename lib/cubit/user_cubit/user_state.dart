@@ -11,3 +11,4 @@ final class SingInFailed extends UserState {
 
 final class SingInLoading extends UserState {}
 
+final class UploadImageSuccess extends UserState {}
