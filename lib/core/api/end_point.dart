@@ -1,14 +1,20 @@
 class EndPoint {
   static String baseUrl = "https://food-api-omega.vercel.app/api/v1/";
   static String signIn = "user/signin";
+  static String signUp = "user/signup";
 }
 
 class ApiKeys {
+  static String userId = "userId";
   static String token = "token";
   static String status = "status";
   static String errorMessage = "ErrorMessage";
+  static String message = "message";
   static String email = "email";
   static String password = "password";
-  static String message = "message";
-  static String userId = "userId";
+  static String confirmPassword = "confirmPassword";
+  static String name = "name";
+  static String phone = "phone";
+  static String location = "location";
+  static String profilePic ="profilePic";
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit/user_cubit.dart';
+import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit/user_state.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/already_have_an_account_widget.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/custom_form_button.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/custom_input_field.dart';
@@ -14,7 +15,25 @@ class SignUpScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
+      child: BlocConsumer<UserCubit, UserState>(
+        listener: (BuildContext context, UserState state) {
+          if (state is SingUpSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+               SnackBar(
+                content: Text(state.message),
+              ),
+            );
+          }
+          else if (state is SingUpFailed) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+              ),
+            );
+          }
+        },
+  builder: (context, state) {
+    return Scaffold(
         backgroundColor: const Color(0xffEEF1F3),
         body: SingleChildScrollView(
           child: Form(
@@ -70,9 +89,13 @@ class SignUpScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 22),
                 //!Sign Up Button
+
+                state is SingUpLoading ? const CircularProgressIndicator() :
                 CustomFormButton(
                   innerText: 'Signup',
-                  onPressed: () {},
+                  onPressed: () {
+                    context.read<UserCubit>().signUp();
+                  },
                 ),
                 const SizedBox(height: 18),
                 //! Already have an account widget
@@ -82,7 +105,9 @@ class SignUpScreen extends StatelessWidget {
             ),
           ),
         ),
-      ),
+      );
+  },
+),
     );
   }
 }

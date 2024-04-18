@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:happy_tech_mastering_api_with_flutter/core/api/api_consumer.dart';
@@ -6,6 +7,7 @@ import 'package:happy_tech_mastering_api_with_flutter/core/database/cache/cache_
 import 'package:happy_tech_mastering_api_with_flutter/core/error/exceptions.dart';
 import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit/user_state.dart';
 import 'package:happy_tech_mastering_api_with_flutter/models/Sign_in_model.dart';
+import 'package:happy_tech_mastering_api_with_flutter/models/Sign_up_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -14,6 +16,7 @@ class UserCubit extends Cubit<UserState> {
 
   final ApiConsumer api;
   SignInModel? signInModel;
+  SignUpModel? signUpModel;
 
   //Sign in Form key
   GlobalKey<FormState> signInFormKey = GlobalKey();
@@ -46,8 +49,39 @@ class UserCubit extends Cubit<UserState> {
   TextEditingController confirmPassword = TextEditingController();
 
   uploadImagePic(XFile image) {
-    profilePic =image;
+    profilePic = image;
     emit(UploadImageSuccess());
+  }
+
+  signUp() async {
+    emit(SingUpLoading());
+    try {
+      var response = await api.post(
+        EndPoint.signUp,
+        isFormData: true,
+        body: {
+          ApiKeys.name: signUpName.text,
+          ApiKeys.email: signUpEmail.text,
+          ApiKeys.password: signUpPassword.text,
+          ApiKeys.confirmPassword: confirmPassword.text,
+          ApiKeys.phone: signUpPhoneNumber.text,
+          ApiKeys.location:
+              '{"name":"methalfa","address":"meet halfa","coordinates":[30.1572709,31.224779]}',
+          ApiKeys.profilePic: await MultipartFile.fromFile(
+            profilePic!.path,
+            filename: profilePic!.name,
+          ),
+        },
+      );
+      signUpModel = SignUpModel.fromJson(response);
+      emit(SingUpSuccess(
+        signUpModel!.message!,
+      ));
+    } on ServerException catch (e) {
+      emit(
+        SingUpFailed(errorMessage: e.errorModel.errorMessage),
+      );
+    }
   }
 
   signIn() async {
