@@ -23,6 +23,7 @@ class SignUpScreen extends StatelessWidget {
                 content: Text(state.message),
               ),
             );
+            Navigator.pop(context);
           }
           else if (state is SingUpFailed) {
             ScaffoldMessenger.of(context).showSnackBar(
@@ -95,6 +96,7 @@ class SignUpScreen extends StatelessWidget {
                   innerText: 'Signup',
                   onPressed: () {
                     context.read<UserCubit>().signUp();
+
                   },
                 ),
                 const SizedBox(height: 18),
