@@ -8,6 +8,7 @@ import 'package:happy_tech_mastering_api_with_flutter/core/error/exceptions.dart
 import 'package:happy_tech_mastering_api_with_flutter/cubit/user_cubit/user_state.dart';
 import 'package:happy_tech_mastering_api_with_flutter/models/Sign_in_model.dart';
 import 'package:happy_tech_mastering_api_with_flutter/models/Sign_up_model.dart';
+import 'package:happy_tech_mastering_api_with_flutter/models/User_model.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 
@@ -17,6 +18,7 @@ class UserCubit extends Cubit<UserState> {
   final ApiConsumer api;
   SignInModel? signInModel;
   SignUpModel? signUpModel;
+  UserModel ? userModel;
 
   //Sign in Form key
   GlobalKey<FormState> signInFormKey = GlobalKey();
@@ -51,6 +53,25 @@ class UserCubit extends Cubit<UserState> {
   uploadImagePic(XFile image) {
     profilePic = image;
     emit(UploadImageSuccess());
+  }
+
+  getUserData() async {
+    emit(UserLoading());
+    try {
+      var response = await api.get(
+        EndPoint.getUserDataEndPoint(
+          CacheHelper().getData(key: ApiKeys.userId),
+        ),
+      );
+ userModel = UserModel.fromJson(response);
+      emit(UserSuccess(
+        userModel!,
+      ));
+    } on ServerException catch (e) {
+      emit(
+      UserFailed(errorMessage: e.errorModel.errorMessage),
+      );
+    }
   }
 
   signUp() async {
