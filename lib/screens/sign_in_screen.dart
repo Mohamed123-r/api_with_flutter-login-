@@ -9,6 +9,8 @@ import 'package:happy_tech_mastering_api_with_flutter/widgets/forget_password_wi
 import 'package:happy_tech_mastering_api_with_flutter/widgets/page_header.dart';
 import 'package:happy_tech_mastering_api_with_flutter/widgets/page_heading.dart';
 
+import 'profile_screen.dart';
+
 class SignInScreen extends StatelessWidget {
   const SignInScreen({Key? key}) : super(key: key);
 
@@ -22,6 +24,17 @@ class SignInScreen extends StatelessWidget {
            ScaffoldMessenger.of(context).showSnackBar(
              const SnackBar(
                content: Text("Login Successful"),
+
+             ),
+
+           );
+           context.read<UserCubit>().getUserData();
+           Navigator.push(
+
+             context,
+             MaterialPageRoute(
+               builder: (context) =>
+               const ProfileScreen(),
              ),
            );
          }
@@ -79,14 +92,7 @@ class SignInScreen extends StatelessWidget {
                                 : CustomFormButton(
                                     innerText: 'Sign In',
                                     onPressed: () {
-                                      context.read<UserCubit>().signIn();// Navigator.push(
-                                      //   context,
-                                      //   MaterialPageRoute(
-                                      //     builder: (context) =>
-                                      //         const ProfileScreen(),
-                                      //   ),
-                                      // );
-                                    },
+                                      context.read<UserCubit>().signIn();   },
                                   ),
                             const SizedBox(height: 18),
                             //! Don't Have An Account ?
